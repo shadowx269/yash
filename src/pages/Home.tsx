@@ -14,7 +14,7 @@ import { AnimatedSection } from '@/components/AnimatedSection';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { AppSidebar } from '@/components/AppSidebar';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { SlidersHorizontal, X } from 'lucide-react';
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,6 +26,7 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Derive price bounds from data
   const { minPrice, maxPrice } = useMemo(() => {
@@ -126,7 +127,7 @@ export default function Home() {
       <Header onSearch={setSearchQuery} />
 
       <div className="flex">
-        <div className={`hidden lg:block fixed left-0 top-[57px] bottom-0 z-40 overflow-y-auto transition-all duration-300 ${isSidebarCollapsed ? 'lg:w-16' : 'lg:w-72 xl:w-80'}`}>
+        <div className={`hidden lg:block fixed left-0 top-[57px] bottom-0 z-40 overflow-y-auto transition-all duration-300 ${isSidebarCollapsed ? 'lg:w-16' : 'lg:w-64 xl:w-72'}`}>
           <AppSidebar
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
@@ -145,18 +146,27 @@ export default function Home() {
           />
         </div>
 
-        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-72 xl:ml-80'}`}>
-          <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8 lg:space-y-12">
-            <div className="flex items-center justify-between">
+        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64 xl:ml-72'}`}>
+          <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 lg:py-6 space-y-4 sm:space-y-6 lg:space-y-8">
+            <div className="flex items-center justify-between gap-2">
               <Breadcrumb />
-              <Sheet>
+              <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="sm" className="lg:hidden">
-                    <Menu className="h-4 w-4 mr-2" />
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="lg:hidden h-9 px-3 sm:px-4 text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all"
+                  >
+                    <SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
                     Filters
+                    {hasActiveFilters && (
+                      <span className="ml-1.5 px-1.5 py-0.5 bg-accent text-accent-foreground rounded-full text-xs font-bold">
+                        {[selectedCategory !== 'All', sortBy !== 'relevance', priceRange[0] !== minPrice || priceRange[1] !== maxPrice].filter(Boolean).length}
+                      </span>
+                    )}
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="left" className="w-80 p-0">
+                <SheetContent side="left" className="w-[85vw] sm:w-96 p-0">
                   <AppSidebar
                     selectedCategory={selectedCategory}
                     onSelectCategory={setSelectedCategory}
@@ -172,13 +182,17 @@ export default function Home() {
                     totalCount={products.length}
                     isCollapsed={false}
                     onToggle={() => {}}
+                    isMobileSheet={true}
+                    onMobileClose={() => setIsMobileFilterOpen(false)}
                   />
                 </SheetContent>
               </Sheet>
             </div>
 
             <AnimatedSection animation="scaleIn">
-              <HeroCarousel />
+              <div className="rounded-xl sm:rounded-2xl overflow-hidden">
+                <HeroCarousel />
+              </div>
             </AnimatedSection>
 
             <AnimatedSection>
@@ -191,27 +205,27 @@ export default function Home() {
 
             {trendingProducts.length > 0 && selectedCategory === 'All' && !searchQuery && (
               <AnimatedSection>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 lg:mb-6 gap-2 sm:gap-3">
                   <div className="flex items-center gap-2 sm:gap-3">
-                    <div className="h-8 w-1 sm:h-10 sm:w-1.5 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                    <div className="h-6 w-1 sm:h-8 sm:w-1 lg:h-10 lg:w-1.5 bg-gradient-to-b from-primary to-accent rounded-full"></div>
                     <div>
-                      <h2 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                         Trending Now
                       </h2>
-                      <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">Most popular items this week</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">Most popular items</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 self-start sm:self-auto">
+                  <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2 bg-gradient-to-r from-primary/10 to-accent/10 rounded-full border border-primary/20 self-start sm:self-auto">
                     <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-accent rounded-full animate-pulse"></div>
                     <span className="text-xs sm:text-sm font-semibold text-primary">Hot Picks</span>
                   </div>
                 </div>
                 <div className="relative">
-                  <div className="flex gap-3 sm:gap-4 lg:gap-5 overflow-x-auto pb-4 scrollbar-hide snap-x snap-mandatory -mx-3 sm:-mx-4 px-3 sm:px-4">
+                  <div className="flex gap-2.5 sm:gap-3 lg:gap-4 overflow-x-auto pb-3 sm:pb-4 scrollbar-hide snap-x snap-mandatory -mx-3 sm:-mx-4 px-3 sm:px-4">
                     {trendingProducts.map((product, index) => (
                       <div
                         key={product.id}
-                        className="min-w-[160px] sm:min-w-[200px] md:min-w-[260px] snap-start"
+                        className="min-w-[140px] xs:min-w-[150px] sm:min-w-[180px] md:min-w-[200px] lg:min-w-[220px] snap-start"
                         style={{
                           animationDelay: `${index * 100}ms`,
                           animation: 'fade-in 0.5s ease-out forwards'
@@ -227,21 +241,21 @@ export default function Home() {
             )}
 
             <AnimatedSection>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4 lg:mb-6 gap-2 sm:gap-3">
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="h-8 w-1 sm:h-10 sm:w-1.5 bg-gradient-to-b from-primary to-accent rounded-full"></div>
+                  <div className="h-6 w-1 sm:h-8 sm:w-1 lg:h-10 lg:w-1.5 bg-gradient-to-b from-primary to-accent rounded-full"></div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold text-foreground">
+                    <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-heading font-bold text-foreground">
                       {selectedCategory === 'All' ? 'All Products' : selectedCategory}
                     </h2>
                     <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-                      {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'} available
+                      {filteredProducts.length} {filteredProducts.length === 1 ? 'item' : 'items'}
                     </p>
                   </div>
                 </div>
               </div>
               {isLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-3 lg:gap-4">
                   {Array.from({ length: 10 }).map((_, i) => (
                     <div key={i} className="space-y-2 sm:space-y-3">
                       <Skeleton className="w-full aspect-[3/4] rounded-xl sm:rounded-2xl" />
@@ -251,7 +265,7 @@ export default function Home() {
                   ))}
                 </div>
               ) : filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-3 lg:gap-4">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}
@@ -266,23 +280,25 @@ export default function Home() {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 sm:py-16 lg:py-20 animate-fade-in">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mx-auto mb-4 sm:mb-6 rounded-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                    <span className="text-2xl sm:text-3xl lg:text-4xl">🔍</span>
+                <div className="text-center py-8 sm:py-12 lg:py-16 animate-fade-in">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 mx-auto mb-3 sm:mb-4 rounded-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
+                    <span className="text-xl sm:text-2xl lg:text-3xl">🔍</span>
                   </div>
-                  <h3 className="text-lg sm:text-xl lg:text-2xl font-heading font-bold mb-2">No products found</h3>
-                  <p className="text-muted-foreground text-sm sm:text-base lg:text-lg mb-4 sm:mb-6">
-                    Try adjusting your search or category filter
+                  <h3 className="text-base sm:text-lg lg:text-xl font-heading font-bold mb-1.5 sm:mb-2">No products found</h3>
+                  <p className="text-muted-foreground text-xs sm:text-sm lg:text-base mb-3 sm:mb-4 px-4">
+                    Try adjusting your filters
                   </p>
                   <Button
                     onClick={() => {
                       setSelectedCategory('All');
                       setSearchQuery('');
+                      setPriceRange([minPrice, maxPrice]);
+                      setSortBy('relevance');
                     }}
                     variant="outline"
-                    className="rounded-full px-6 sm:px-8 text-sm sm:text-base"
+                    className="rounded-full px-4 sm:px-6 lg:px-8 h-9 sm:h-10 text-xs sm:text-sm"
                   >
-                    Clear Filters
+                    Clear All Filters
                   </Button>
                 </div>
               )}
