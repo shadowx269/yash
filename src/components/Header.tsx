@@ -1,8 +1,7 @@
-import { Heart, Search, User, LogOut, Moon, Sun } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Search, Moon, Sun } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { getCurrentUser, saveCurrentUser } from '@/lib/mockData';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 
@@ -12,23 +11,7 @@ interface HeaderProps {
 
 export const Header = ({ onSearch }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [user, setUser] = useState(getCurrentUser());
-  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      setUser(getCurrentUser());
-    };
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const handleLogout = () => {
-    saveCurrentUser(null);
-    setUser(null);
-    navigate('/');
-  };
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
@@ -54,7 +37,6 @@ export const Header = ({ onSearch }: HeaderProps) => {
             </h1>
           </Link>
 
-          {/* Action buttons - optimized for mobile */}
           <div className="flex items-center gap-1 sm:gap-2">
             <Button
               variant="ghost"
@@ -65,35 +47,6 @@ export const Header = ({ onSearch }: HeaderProps) => {
             >
               {theme === 'dark' ? <Sun className="h-4 w-4 sm:h-5 sm:w-5" /> : <Moon className="h-4 w-4 sm:h-5 sm:w-5" />}
             </Button>
-
-            {user && (
-              <Link to="/wishlist">
-                <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 transition-all rounded-full h-8 w-8 sm:h-10 sm:w-10 shadow-sm">
-                  <Heart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                </Button>
-              </Link>
-            )}
-
-            {user ? (
-              <>
-                {user.role === 'admin' && (
-                  <Link to="/admin">
-                    <Button variant="ghost" size="sm" className="hidden sm:flex hover:bg-primary/10 rounded-full shadow-sm font-semibold text-xs sm:text-sm">
-                      Admin
-                    </Button>
-                  </Link>
-                )}
-                <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:bg-destructive/10 hover:text-destructive rounded-full transition-all h-8 w-8 sm:h-10 sm:w-10 shadow-sm">
-                  <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
-                </Button>
-              </>
-            ) : (
-              <Link to="/login">
-                <Button variant="ghost" size="icon" className="hover:bg-primary/10 rounded-full transition-all h-8 w-8 sm:h-10 sm:w-10 shadow-sm">
-                  <User className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-                </Button>
-              </Link>
-            )}
           </div>
         </div>
 
