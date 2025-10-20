@@ -25,6 +25,7 @@ export default function Home() {
   const [sortBy, setSortBy] = useState<'relevance' | 'price-asc' | 'price-desc' | 'discount-desc'>('relevance');
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Derive price bounds from data
   const { minPrice, maxPrice } = useMemo(() => {
@@ -125,7 +126,7 @@ export default function Home() {
       <Header onSearch={setSearchQuery} />
 
       <div className="flex">
-        <div className="hidden lg:block lg:w-72 xl:w-80 fixed left-0 top-[73px] bottom-0 z-40 overflow-y-auto">
+        <div className={`hidden lg:block fixed left-0 top-[57px] bottom-0 z-40 overflow-y-auto transition-all duration-300 ${isSidebarCollapsed ? 'lg:w-16' : 'lg:w-72 xl:w-80'}`}>
           <AppSidebar
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
@@ -139,10 +140,12 @@ export default function Home() {
             hasActiveFilters={hasActiveFilters}
             productCount={filteredProducts.length}
             totalCount={products.length}
+            isCollapsed={isSidebarCollapsed}
+            onToggle={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
           />
         </div>
 
-        <main className="flex-1 lg:ml-72 xl:ml-80">
+        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-72 xl:ml-80'}`}>
           <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 space-y-6 sm:space-y-8 lg:space-y-12">
             <div className="flex items-center justify-between">
               <Breadcrumb />
@@ -167,6 +170,8 @@ export default function Home() {
                     hasActiveFilters={hasActiveFilters}
                     productCount={filteredProducts.length}
                     totalCount={products.length}
+                    isCollapsed={false}
+                    onToggle={() => {}}
                   />
                 </SheetContent>
               </Sheet>
