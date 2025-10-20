@@ -13,8 +13,6 @@ import { PromoBanner } from '@/components/PromoBanner';
 import { AnimatedSection } from '@/components/AnimatedSection';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { AppSidebar } from '@/components/AppSidebar';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { SlidersHorizontal, X } from 'lucide-react';
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,7 +24,6 @@ export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Derive price bounds from data
   const { minPrice, maxPrice } = useMemo(() => {
@@ -127,7 +124,7 @@ export default function Home() {
       <Header onSearch={setSearchQuery} />
 
       <div className="flex">
-        <div className={`hidden lg:block fixed left-0 top-[57px] bottom-0 z-40 overflow-y-auto transition-all duration-300 ${isSidebarCollapsed ? 'lg:w-16' : 'lg:w-64 xl:w-72'}`}>
+        <div className={`fixed left-0 top-[57px] bottom-0 z-30 overflow-y-auto transition-all duration-300 bg-card border-r ${isSidebarCollapsed ? 'w-16' : 'w-56 md:w-64 xl:w-72'}`}>
           <AppSidebar
             selectedCategory={selectedCategory}
             onSelectCategory={setSelectedCategory}
@@ -146,48 +143,9 @@ export default function Home() {
           />
         </div>
 
-        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64 xl:ml-72'}`}>
+        <main className={`flex-1 transition-all duration-300 ${isSidebarCollapsed ? 'ml-16' : 'ml-56 md:ml-64 xl:ml-72'}`}>
           <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 lg:py-6 space-y-4 sm:space-y-6 lg:space-y-8">
-            <div className="flex items-center justify-between gap-2">
-              <Breadcrumb />
-              <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="default"
-                    size="sm"
-                    className="lg:hidden h-9 px-3 sm:px-4 text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg transition-all"
-                  >
-                    <SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5" />
-                    Filters
-                    {hasActiveFilters && (
-                      <span className="ml-1.5 px-1.5 py-0.5 bg-accent text-accent-foreground rounded-full text-xs font-bold">
-                        {[selectedCategory !== 'All', sortBy !== 'relevance', priceRange[0] !== minPrice || priceRange[1] !== maxPrice].filter(Boolean).length}
-                      </span>
-                    )}
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-[85vw] sm:w-96 p-0">
-                  <AppSidebar
-                    selectedCategory={selectedCategory}
-                    onSelectCategory={setSelectedCategory}
-                    sortBy={sortBy}
-                    onSortChange={setSortBy}
-                    priceRange={priceRange}
-                    onPriceRangeChange={setPriceRange}
-                    minPrice={minPrice}
-                    maxPrice={maxPrice}
-                    onClearFilters={clearAllFilters}
-                    hasActiveFilters={hasActiveFilters}
-                    productCount={filteredProducts.length}
-                    totalCount={products.length}
-                    isCollapsed={false}
-                    onToggle={() => {}}
-                    isMobileSheet={true}
-                    onMobileClose={() => setIsMobileFilterOpen(false)}
-                  />
-                </SheetContent>
-              </Sheet>
-            </div>
+            <Breadcrumb />
 
             <AnimatedSection animation="scaleIn">
               <div className="rounded-xl sm:rounded-2xl overflow-hidden">
@@ -221,11 +179,11 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="relative">
-                  <div className="flex gap-2.5 sm:gap-3 lg:gap-4 overflow-x-auto pb-3 sm:pb-4 scrollbar-hide snap-x snap-mandatory -mx-3 sm:-mx-4 px-3 sm:px-4">
+                  <div className="flex gap-2 sm:gap-2.5 lg:gap-3 overflow-x-auto pb-3 sm:pb-4 scrollbar-hide snap-x snap-mandatory -mx-3 sm:-mx-4 px-3 sm:px-4">
                     {trendingProducts.map((product, index) => (
                       <div
                         key={product.id}
-                        className="min-w-[140px] xs:min-w-[150px] sm:min-w-[180px] md:min-w-[200px] lg:min-w-[220px] snap-start"
+                        className="min-w-[110px] xs:min-w-[120px] sm:min-w-[140px] md:min-w-[160px] lg:min-w-[180px] snap-start"
                         style={{
                           animationDelay: `${index * 100}ms`,
                           animation: 'fade-in 0.5s ease-out forwards'
@@ -255,17 +213,17 @@ export default function Home() {
                 </div>
               </div>
               {isLoading ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-3 lg:gap-4">
+                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2 sm:gap-2.5 lg:gap-3">
                   {Array.from({ length: 10 }).map((_, i) => (
-                    <div key={i} className="space-y-2 sm:space-y-3">
-                      <Skeleton className="w-full aspect-[3/4] rounded-xl sm:rounded-2xl" />
-                      <Skeleton className="h-3 sm:h-4 w-3/4" />
-                      <Skeleton className="h-3 sm:h-4 w-1/2" />
+                    <div key={i} className="space-y-1 sm:space-y-2">
+                      <Skeleton className="w-full aspect-[4/5] sm:aspect-[3/4] rounded-lg sm:rounded-xl" />
+                      <Skeleton className="h-2 sm:h-3 w-3/4" />
+                      <Skeleton className="h-2 sm:h-3 w-1/2" />
                     </div>
                   ))}
                 </div>
               ) : filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-3 lg:gap-4">
+                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2 sm:gap-2.5 lg:gap-3">
                   {filteredProducts.map((product, index) => (
                     <div
                       key={product.id}

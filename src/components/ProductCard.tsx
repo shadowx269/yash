@@ -49,7 +49,7 @@ export const ProductCard = ({ product, onSelect }: ProductCardProps) => {
       aria-label={product.name}
     >
       <CardContent className="p-0">
-        <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+        <div className="relative aspect-[4/5] sm:aspect-[3/4] overflow-hidden bg-muted">
           <img
             src={product.images[0]}
             alt={product.name}
@@ -95,22 +95,22 @@ export const ProductCard = ({ product, onSelect }: ProductCardProps) => {
             </button>
           </div>
         </div>
-        <div className="p-2.5 sm:p-3 lg:p-4 space-y-1 sm:space-y-1.5">
-          <h3 className="font-heading font-semibold text-xs sm:text-sm line-clamp-2 mb-0.5 sm:mb-1 group-hover:text-primary transition-colors duration-300">{product.name}</h3>
+        <div className="p-1.5 sm:p-2.5 lg:p-3 space-y-0.5 sm:space-y-1">
+          <h3 className="font-heading font-semibold text-[10px] sm:text-xs line-clamp-2 mb-0.5 group-hover:text-primary transition-colors duration-300">{product.name}</h3>
           {product.fabric && (
-            <p className="text-[10px] sm:text-xs text-muted-foreground font-medium">{product.fabric}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground font-medium">{product.fabric}</p>
           )}
-          <div className="flex items-baseline gap-1.5 sm:gap-2 pt-0.5 sm:pt-1">
-            <span className="text-base sm:text-lg lg:text-xl font-bold text-primary">₹{product.discountPrice}</span>
+          <div className="flex items-baseline gap-1 sm:gap-1.5 pt-0.5">
+            <span className="text-sm sm:text-base lg:text-lg font-bold text-primary">₹{product.discountPrice}</span>
             {product.discountPercent > 0 && (
-              <span className="text-[10px] sm:text-xs text-muted-foreground line-through">
+              <span className="text-[9px] sm:text-[10px] text-muted-foreground line-through">
                 ₹{product.originalPrice}
               </span>
             )}
           </div>
           {product.stock && (
-            <p className="text-[10px] sm:text-xs font-semibold text-green-600 mt-1 sm:mt-1.5 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-600 rounded-full animate-pulse"></span>
+            <p className="text-[9px] sm:text-[10px] font-semibold text-green-600 mt-0.5 sm:mt-1 flex items-center gap-0.5">
+              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-green-600 rounded-full animate-pulse"></span>
               In Stock
             </p>
           )}

@@ -97,7 +97,7 @@ export const AppSidebar = ({
   };
 
   return (
-    <aside className={cn("h-full bg-card flex flex-col transition-all duration-300 relative", isMobileSheet ? "border-0" : "border-r", isCollapsed ? "w-16" : "w-full")}>
+    <aside className={cn("h-full bg-card flex flex-col transition-all duration-300 relative shadow-sm", isMobileSheet ? "border-0" : "border-r", isCollapsed ? "w-16" : "w-full")}>
       {!isMobileSheet && (
         <Button
           variant="ghost"
