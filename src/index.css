@@ -1,0 +1,285 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Enterprise Fashion Palette */
+    --background: 36 35% 96%;
+    /* Warm Off‑White (Linen) */
+    --foreground: 232 24% 16%;
+    /* Charcoal Indigo */
+
+    --card: 36 32% 97%;
+    --card-foreground: 232 24% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 232 24% 16%;
+
+    --primary: 340 65% 45%;
+    /* Rich Rani Pink */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 33 54% 95%;
+    /* Silk Ivory */
+    --secondary-foreground: 232 24% 16%;
+
+    --muted: 26 24% 93%;
+    --muted-foreground: 232 16% 40%;
+
+    --accent: 26 85% 55%;
+    /* Marigold */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 26 20% 85%;
+    --input: 0 0% 100%;
+    --ring: 340 65% 45%;
+
+    --radius: 0.9rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 232 24% 16%;
+    --sidebar-primary: 340 65% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 33 54% 95%;
+    --sidebar-accent-foreground: 232 24% 16%;
+    --sidebar-border: 26 20% 85%;
+    --sidebar-ring: 340 65% 45%;
+
+    /* Custom design tokens */
+    --success: 152 64% 35%;
+    /* Emerald */
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    /* Amber */
+    --warning-foreground: 0 0% 100%;
+    --info: 200 90% 45%;
+    --info-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 240 16% 8%;
+    /* Deep Noir */
+    --foreground: 33 54% 95%;
+
+    --card: 240 16% 10%;
+    --card-foreground: 33 54% 95%;
+
+    --popover: 240 16% 10%;
+    --popover-foreground: 33 54% 95%;
+
+    --primary: 340 70% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 16% 13%;
+    --secondary-foreground: 33 54% 95%;
+
+    --muted: 240 16% 13%;
+    --muted-foreground: 33 20% 70%;
+
+    --accent: 26 85% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 40%;
+    --destructive-foreground: 33 54% 95%;
+
+    --border: 240 16% 16%;
+    --input: 240 16% 16%;
+    --ring: 340 70% 55%;
+    --sidebar-background: 240 16% 10%;
+    --sidebar-foreground: 33 54% 95%;
+    --sidebar-primary: 340 70% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 16% 13%;
+    --sidebar-accent-foreground: 33 54% 95%;
+    --sidebar-border: 240 16% 16%;
+    --sidebar-ring: 340 70% 55%;
+
+    --success: 152 64% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 200 90% 50%;
+    --info-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Mobile-first font size */
+    font-size: 14px;
+  }
+
+  /* Mobile-first typography */
+  @media (min-width: 640px) {
+    body {
+      font-size: 16px;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Playfair Display', serif;
+    /* Mobile-first line height */
+    line-height: 1.2;
+  }
+
+  /* Mobile-first spacing */
+  .container {
+    @apply px-3 sm:px-4 lg:px-6 xl:px-8;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Mobile-first animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+
+    100% {
+      background-position: calc(200px + 100%) 0;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.5s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out forwards;
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background-size: 200px 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Filter-specific animations */
+  .filter-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .filter-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .filter-chip {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .filter-chip:hover {
+    transform: translateY(-1px);
+  }
+
+  .filter-chip.active {
+    transform: scale(1.05);
+  }
+
+  /* Mobile-first touch targets */
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Mobile-first focus styles */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Mobile-first text selection */
+  ::selection {
+    @apply bg-primary/20 text-primary-foreground;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
